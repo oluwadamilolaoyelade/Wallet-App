@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
-const { Schema, model } = mongoose
+const { Schema } = mongoose
 
 const userSchema = new Schema({
-    firstname: {
+    firstName: {
         type: String,
         required: true,
         uppercase: true
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true,
         uppercase: true
@@ -17,10 +17,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    phone_number: {
+    phoneNumber: {
         type: String,
         required: true,
-        minlength: 11
+        minlength: 11,
     },
     password: {
         type: String,
@@ -29,13 +29,17 @@ const userSchema = new Schema({
     },
     otp:{
         type: Number,
-        required: true,
         minlength: 4
     },
     pin: {
         type: Number,
-        required: true,
         minlength: 4
+    },
+    balance: {
+        type: Number,
+        walletType: {
+            enum: ["naira", "dollar"]
+        }
     },
     createdAt: {
         type: Date, 
