@@ -27,10 +27,10 @@ const transferSchema = new Schema({
     },
     createdAt: {
         type: Date,
-        default: () => Date.now,
+        default: Date.now,
         immutable: true
     }
 })
 
-const Deposit = mongoose.model('deposit', transferSchema)
-module.exports = Deposit
+const transfer = mongoose.model('transfer', transferSchema)
+module.exports = transfer
