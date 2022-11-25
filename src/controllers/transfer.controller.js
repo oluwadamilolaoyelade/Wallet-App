@@ -37,6 +37,26 @@ const transferType = async (req, res, next) => {
     }
 }
 
+const oneTransfer = async (req, res) => {
+    try {
+        const findTransfer = await transfer.findOne(req.params.userId)
+        if (!findTransfer) {
+            return res.status(401).json({
+                message: 'user does not exists'
+            })
+        } else {
+            return res.status(200).json({
+                status: 'success',
+                message: 'transaction fetched successfully',
+                data: findTransfer
+            })
+        }
+    } catch (error) {
+        return error
+    }
+}
+
 module.exports = {
-    transferType
+    transferType,
+    oneTransfer
 }

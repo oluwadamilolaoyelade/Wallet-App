@@ -103,8 +103,30 @@ const createPin = async(req, res, next) => {
     }
 }
 
+const oneUser = async (req, res) => {
+    
+        try {
+            const user = await User.findById(req.params.id)
+            if (!user) {
+                return res.status(401).json({
+                    message: 'user does not exist'
+                })
+            } else {
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'user fetched successfully',
+                    data: user
+                })
+            }
+        } catch (error) {
+            return error
+        }
+    
+}
+
 module.exports = {
     signUp,
     login,
-    createPin
+    createPin,
+    oneUser
 }
