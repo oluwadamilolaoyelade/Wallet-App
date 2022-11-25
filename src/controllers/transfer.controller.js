@@ -6,8 +6,6 @@ const transferType = async (req, res, next) => {
     let { walletType, accountNumber, amount, pin} = req.body
 
     let userId = await User.findById(req.params.id)
-    // let data = await User.findById(req.params.id)
-    // const userId = data._id
     
     let userPIn = userId.pin
     try {

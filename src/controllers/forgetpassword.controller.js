@@ -18,7 +18,7 @@ const forgetPassword = async(req, res) => {
         
         const user = await User.findOne({ email });
         const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET_KEY, { expiresIn: "45min"})
-        //reset password link
+        
 
         const resetLink = `http://localhost:8080/reset_password?token=${token}`
         console.log(resetLink)
@@ -35,7 +35,6 @@ const forgetPassword = async(req, res) => {
 const resetPassword = async(req, res) => {
     let { email, password} = req.body;
     console.log(email)
-    // confirmPassword = bcrypt.hash(confirmPassword, 10)
     try {
         password = bcrypt.hashSync(password, 10)
         console.log(password)

@@ -14,7 +14,6 @@ router.post('/forgetPassword',  forgetPassword.forgetPassword)
 router.patch('/resetPassword', verifyToken, forgetPassword.resetPassword)
 router.post('/deposit/:id',  verifyToken, deposit.depositType )
 router.post('/transfer/:id', verifyToken, transfer.transferType )
-// router.get('/oneTansfer/:id', transfer.oneTransfer )
 router.get('/oneTransfer/:id', transfer.oneTransfer)
 
 module.exports = router;
