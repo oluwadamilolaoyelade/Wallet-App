@@ -28,7 +28,7 @@ const userSchema = new Schema({
         minlength: 4
     },
     otp:{
-        type: Number,
+        type: String,
         minlength: 4
     },
     pin: {

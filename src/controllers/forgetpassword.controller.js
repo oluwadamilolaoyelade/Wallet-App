@@ -33,7 +33,8 @@ const forgetPassword = async(req, res) => {
 };
 
 const resetPassword = async(req, res) => {
-    let { email, password} = req.body;
+    let { password} = req.body;
+    let email = req.user.id
     console.log(email)
     try {
         password = bcrypt.hashSync(password, 10)

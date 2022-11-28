@@ -2,6 +2,9 @@ const User = require("../model/user");
 const dotenv = require('dotenv').config();
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const sendOtp  = require('../services/sendOtp')
+
+const { generateOTP } = require('../services/otp')
 
 const signUp = async (req, res, next) => {
 
@@ -18,25 +21,58 @@ const signUp = async (req, res, next) => {
             });
         } else {
             password = await bcrypt.hash(password, 10);
+            const otp = generateOTP();
+            console.log(otp)
             const newUser = new User({
                 firstName, 
                 lastName, 
                 email, 
                 phoneNumber, 
-                password, 
+                password,
+                otp,
                 token
             });
+            await sendOtp(email, otp)
             await newUser.save();
             console.log(newUser)
 
             return res.status(200).json({
                 status: 'successful',
-                message: 'Thank you for signing up',
+                message: 'verify your account',
                 data: newUser, token
             })
         }
     } catch (error) {
         return next(error)
+    }
+}
+
+const verifyAccount = async (req, res) => {
+    let { otp } = req.body
+    let email = req.user.id
+    try {
+        const user = await User.findOne({email});
+        const userOtp = user.otp
+        console.log(userOtp)
+        if (otp !== userOtp) {
+            return res.status(401).json({
+                message: 'invalid OTP'
+            })
+        } else {
+            const updatedUser = await User.findByIdAndUpdate(user._id, {
+                $set: {otp: otp}
+            })
+            await updatedUser.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'account verified, user signed up succcessfully',
+                data: user
+            })
+        }
+
+        
+    } catch (error) {
+        return error
     }
 }
 
@@ -128,5 +164,6 @@ module.exports = {
     signUp,
     login,
     createPin,
-    oneUser
+    oneUser,
+    verifyAccount
 }
