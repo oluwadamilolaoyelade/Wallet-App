@@ -97,7 +97,7 @@ const login = async(req, res, next) => {
                 })
 
             } else {
-                const token  = await jwt.sign({ id: data._id}, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
+                const token  = await jwt.sign({ id: data._id}, process.env.JWT_SECRET_KEY, { expiresIn: "11h" });
                 return res.status(200).json({
                     status: 'successful',
                     message: 'logged in successfully',

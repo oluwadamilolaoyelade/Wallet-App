@@ -23,7 +23,7 @@ const transferType = async (req, res, next) => {
                 pin
             })
             const newTransfer = await transferNew.save();
-            if (userId.balance <= transferNew.amount) {
+            if (userId.balance < transferNew.amount) {
                 return res.status(400).json({
                     status: 'failed',
                     message: 'insufficient balance'
