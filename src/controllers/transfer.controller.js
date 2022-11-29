@@ -15,27 +15,36 @@ const transferType = async (req, res, next) => {
                 message: 'incorrect pin'
             })
         } else {
-            const transferNew = new transfer({
-                userId,
-                walletType,
-                accountNumber,
-                amount,
-                pin
-            })
-            const newTransfer = await transferNew.save();
-            if (userId.balance < transferNew.amount) {
-                return res.status(400).json({
+
+            if (amount == 0) {
+                res.status(400).json({
                     status: 'failed',
-                    message: 'insufficient balance'
+                    message: 'enter amount greater than 0'
+                })
+            } else {
+                
+                const transferNew = new transfer({
+                    userId,
+                    walletType,
+                    accountNumber,
+                    amount,
+                    pin
+                })
+                const newTransfer = await transferNew.save();
+                if (userId.balance < transferNew.amount) {
+                    return res.status(400).json({
+                        status: 'failed',
+                        message: 'insufficient balance'
+                    })
+                }
+                const updateBalance = await User.findOneAndUpdate({ _id: id}, { $inc: { balance: -newTransfer.amount, walletType: newTransfer.walletType} }, {new: true})
+                await updateBalance.save();
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'transfer successful',
+                    data: newTransfer
                 })
             }
-            const updateBalance = await User.findOneAndUpdate({ _id: id}, { $inc: { balance: -newTransfer.amount, walletType: newTransfer.walletType} }, {new: true})
-            await updateBalance.save();
-            return res.status(200).json({
-                status: 'success',
-                message: 'transfer successful',
-                data: newTransfer
-            })
 
         }
     } catch (error) {
