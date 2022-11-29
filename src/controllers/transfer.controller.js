@@ -6,7 +6,8 @@ const transferType = async (req, res, next) => {
     let { walletType, accountNumber, amount, pin} = req.body
 
     let userId = await User.findById(req.params.id)
-    
+    let id = userId._id
+    console.log(userId)
     let userPIn = userId.pin
     try {
         if (userPIn != pin) {
@@ -23,6 +24,8 @@ const transferType = async (req, res, next) => {
                 pin
             })
             const newTransfer = await transferNew.save();
+            const updateBalance = await User.findOneAndUpdate({ _id: id}, { $inc: { balance: -newTransfer.amount, walletType: newTransfer.walletType} }, {new: true})
+            await updateBalance.save();
             return res.status(200).json({
                 status: 'success',
                 message: 'transfer successful',
