@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
     } else {
         const token = req.headers.authorization.split(' ')[1];
         console.log(token)
-        jwt.verify(token, process.env.JWT_SECRET_KEY, {expireIn: "1hr"}, (error, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, {expireIn: "11hr"}, (error, decoded) => {
             if (error) {
                 console.log(error)
             } 
